@@ -47,11 +47,21 @@ class MatrixMultiplication(MRJob):
         self.f.write(str(x) + " " + str(y) + " ")
         self.f.write(str(total) + "\n")
 
+    def mapper2(self, key, values):
+        yield "Number of paths: ", values
+
+    def reducer2(self, key, values):
+        total = sum(values)
+        yield key, total
+        self.f.write(str(key) + " " + str(total))
+
     def steps(self): return [
         MRStep(mapper=self.mapper,
             reducer=self.reducer_multiply),
         MRStep( mapper = self.changeKey,
-            reducer=self.reducer_sum)
+            reducer=self.reducer_sum),
+        MRStep( mapper = self.mapper2,
+            reducer=self.reducer2),       
         ]
 
 if __name__ == '__main__':

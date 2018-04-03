@@ -85,7 +85,7 @@
 		%----------------------------------------------------------------------------------------
 		
 		\HRule \\[0.4cm]
-		{ \huge \bfseries Laboratory Exercise 2} \\[0.4cm] % Title of your document
+		{ \huge \bfseries Laboratory Exercise 3} \\[0.4cm] % Title of your document
 		\HRule \\[1.5cm]
 		
 		%----------------------------------------------------------------------------------------
@@ -124,7 +124,7 @@
 		
 		
 		
-		{\large Date Handed In: \nth{9} March, 2018}\\[1cm] 
+		{\large Date Handed In: \nth{5} April, 2018}\\[1cm] 
 		
 	\end{titlepage}
 
@@ -154,15 +154,46 @@ MrJob is a python-based MapReduce framework. The steps function represent the jo
 
 MrJob is preferable in it's application as the code has no dependencies with Hadoop in comparison to the other frameworks. the framework was also chosen due to documentation being more readily available and easier to implement.
 
-\section{Results}
+\section{Multiplication}
 
-\subsection{Algorithm 1}
+\subsection{Algorithm A} \label{algA}
 
 Algorithm one consists of two iterations of the Mapreduce procedure resulting in two mapper and reducer functions. The first iteration of the mapper function assigns the key value pair of j which is common in both matrices $M_{ij}$ and $N_{jk}$. The reducer function outputs the key-value pair associated with j produced by either matrix. This is used as the input to second mapper function which creates a set of key values (i,k) containing the values associated with the j pairs. The values associated with the same (i,k) key are the summed and emitted by the reducer function in order to get the final result.
 
 Main difference, algorithm 1 uses two steps. Two mappers, two reducers. Simplifies process of mapping to a key. Values associated with matrices, value 0 equals matrix 1. Ensures correct matrice is being multiplied. Split values in reducer, yields new key and new value.
 
-\subsection{Algorithm 2}
+\subsection{Algorithm B}
 
 Single map and reducer stage. Key has an index. Sorts them by j.Multiply corresponding entries with the same j value.
+
+\section{Pairs of Nodes Connected by Paths of Length 3}
+\subsection{Overview}
+According to \cite{pathLength3}, the total number of paths of length 3 from j to i in G is:
+
+ \begin{equation}
+N_{ij}^{3} = \sum _{k,l = 1}^{n} A_{ik}A_{kl}A_{ij} = [G^{3}]_{ij}
+\label{eqn:multiply}
+\end{equation}
+
+Where:
+\begin{tabular}{lll}
+	$G = (v,e)$           &  is an unweighted directed graph of $\mid v \mid$ nodes and $\mid e \mid$ edges \\
+\end{tabular}
+
+From Equation \ref{eqn:multiply}, it is evident that the most efficient way to represent G is in matrix form. Since the majority of the values in the G matrix are 0, all zero value entires should be emitted from the input file.
+
+From Equation \ref{eqn:multiply}, in order to calculate the pairs of nodes that are connected by paths of length 3, the input matrix \textit{File2ForLab3.txt} must be cubed.
+
+In order to perform the calculation, multiplication algorithm A was used. First, the input text file was multiplied with itself to result in A$^{2}$. Then, the resulting matrix was multiplied with the input text file to result in A$^{3}$. In order to count the number of paths, the resulting matrix entries were summed, and this value indicates the total number of paths of length 3.
+
+\subsection{Implementation} 
+In order to implement the above mentioned procedure, two multiplication classes were required. The first (\textit{lab3-multiplicationPart1.py}) makes use of Algorithm A as discussed in \secref{algA}. The result of the first multiplication is written to the text file \textit{partialOutputQ6.txt}. The second class (\textit{lab3-multiplicationPart2.py}) makes use of Algorithm A, but takes two in input files. This is necessary for the second multiplication in which the resultant matrix is multiplied by the input matrix. In this class, the text files are differentiated by name using the MRJob \texttt{os.environ['mapreduce\_map\_input\_file']} function which gives the program access to the input file name. By using the file name, all data that originates from the file \textit{File2ForLab3.txt} is assigned a 0 as an identifier, and all data from the other file is assigned a 1.
+
+To calculate the total number of paths of length 3, a third mapper and reducer stage was added to the second class. In the mapper stage, all the entries of the resulting matrix were assigned the key \textit{Number of paths: }. This ensures that all the values have the same key and can thus be summed in the reducer. Within the reducer stage, the values are summed and the final count is written to the output file.
+
+In order to run the two classes, a bash script was created. Within this script, the two classes are called with their respective input files. The final resulting matrix is written to the text file \textit{outputQ6.txt}. 
+
+\bibliographystyle{witseie}
+\bibliography{lab3}
+
 \end{document}

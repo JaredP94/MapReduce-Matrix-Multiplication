@@ -1,0 +1,168 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% witseiepaper-2005.tex
+%
+%                       Ken Nixon (12 October 2005)
+%
+%                       Sample Paper for ELEN417/455 2005
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,twocolumn]{witseiepaper}
+%
+% All KJN's macros and goodies (some shameless borrowing from SPL)
+\usepackage{KJN}
+\usepackage[super]{nth}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{epstopdf}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{alltt}
+%\usepackage{matlab-prettifier}
+\usepackage{graphicx}
+\usepackage{changes}
+\usepackage{makecell}
+\usepackage{verbatim}
+\usepackage{balance}
+\usepackage{pdfpages}
+\usepackage{ragged2e}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{multirow}
+\usepackage{algpseudocode}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+%\usepackage{flafter}
+
+%\newlength\myindent
+%\setlength\myindent{2em}
+%\newcommand\bindent{%
+%	\begingroup
+%	\setlength{\itemindent}{\myindent}
+%	\addtolength{\algorithmicident}{\myindent}
+%}
+%\newcolumntype\eindent{\endgroup}
+%
+% PDF Info
+%
+\ifpdf
+\pdfinfo{
+	/Title (INSTRUCTIONS AND STYLE GUIDELINES FOR THE PREPARATION OF FINAL YEAR LABORATORY PROJECT PAPERS : 2005 VERSION)
+	/Author (Ken J Nixon)
+	/CreationDate (D:200309251200)
+	/ModDate (D:200510121530)
+	/Subject (ELEN417/455 Paper Format, 2005)
+	/Keywords (ELEN417, ELEN455, paper, instructions, style guidelines, laboratory project)
+}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+	
+	\begin{titlepage}
+		
+		\newcommand{\HRule}{\rule{\linewidth}{0.3mm}} % Defines a new command for the horizontal lines, change thickness here
+		
+		\center % Center everything on the page
+		
+		%----------------------------------------------------------------------------------------
+		%	HEADING SECTIONS
+		%----------------------------------------------------------------------------------------
+		\includegraphics[width=0.3\textwidth]{EIE.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+		
+		%----------------------------------------------------------------------------------------
+		\textsc{\LARGE University of the Witwatersrand } \\[0.1cm] % Name of your university/college
+		\textsc{\LARGE School of Electrical and Information Engineering }\\[1cm] % Major heading such as course name
+		\textsc{\Large ELEN4020: Data Intensive Computing}\\[1.5cm] % Minor heading such as course title
+		
+		%----------------------------------------------------------------------------------------
+		%	TITLE SECTION
+		%----------------------------------------------------------------------------------------
+		
+		\HRule \\[0.4cm]
+		{ \huge \bfseries Laboratory Exercise 2} \\[0.4cm] % Title of your document
+		\HRule \\[1.5cm]
+		
+		%----------------------------------------------------------------------------------------
+		%	AUTHOR SECTION
+		%----------------------------------------------------------------------------------------
+		\textsc{\Large 	\emph{Authors:} } \\[0.1cm]	 
+		
+		
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushleft} \large
+				%			\emph{Author:} \\
+				Kayla-Jade Butkow \\ 714227 % Your name
+			\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushright} \large
+				%	\emph{Author:}\\
+				Jared Ping \\ 704447
+			\end{flushright}
+		\end{minipage}\\[1cm]
+		
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushleft} \large
+				%		\emph{Author:}\\
+				Lara Timm \\ 704157
+			\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushright} \large
+				%		\emph{Author:} \\
+				Matthew van Rooyen \\ 706692
+			\end{flushright}
+		\end{minipage}\\[1cm]
+		
+		
+		
+		{\large Date Handed In: \nth{9} March, 2018}\\[1cm] 
+		
+	\end{titlepage}
+
+
+\pagestyle{plain}
+\setcounter{page}{1}
+\onecolumn
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\section{Matrix Multiplication}
+
+The input to map function consists of two separate text files containing a matrix formatted as a list of strings. The first row of the file provides the dimensions of the given matrix. The proceeding rows contain three columns, the first two representing the row and column index of the element and the third the value of the element.
+
+Each matrix is read in of the form $M_{ij}$ and $N_{jk}$ where i represents the row elements and j the column elements. The product matrix is therefore represented as $P_{i,j} = M_{ij} * N_{jk}$. This is achieved by taking the first row of M and multiplying it by the first column in N and summing the values. This function is performed for every column in B before repeating the process for every row in A. 
+
+\section{Map Reduce}
+
+In order to perform matrix multiplication for large matrices, a MapReduce algorithm was implemented. The algorithm consists of two key features, namely the \verb|map()| function and \verb|reduce()| function. 
+
+The input matrix to the map function is of the form (row, column, value). This data is then assigned a key (i, j, k) within the may function in order to produce a key-value format at the output. The function is performed on each matrix separately before combining the values of each matrix according to the key value producing key-value pairs.
+
+The algorithm consists of two reduce functions. The reduce function performs calculations on the key-value output pairs produced by the map function. \verb|reducer_multiply| simply multiplies the values found at each key (i, k) and prepares the data for summation. The reduce function only processes the data one key at a time. \verb|reducer_sum| sums the output values from the multiplication at each key performing the final step in the matrix multiplication process.
+
+\section{MrJob}
+
+MrJob is a python-based MapReduce framework. The steps function represent the jobs handled within the script. This also allows for multiple one-step jobs to be executed within the program. The mapper function performs allows for the map function to be presented as a single job. The input data is read in one line at a time after which the data is broken down into single values and given a key. Each yeild function within the mapper is outputted as a single line of code. The reducer performs the multiplication and sums the output results before emitting them. MrJob allows for the inclusion of two separate files as input streams to be included in the program.
+
+MrJob is preferable in it's application as the code has no dependencies with Hadoop in comparison to the other frameworks. the framework was also chosen due to documentation being more readily available and easier to implement.
+
+\section{Results}
+
+\subsection{Algorithm 1}
+
+Algorithm one consists of two iterations of the Mapreduce procedure resulting in two mapper and reducer functions. The first iteration of the mapper function assigns the key value pair of j which is common in both matrices $M_{ij}$ and $N_{jk}$. The reducer function outputs the key-value pair associated with j produced by either matrix. This is used as the input to second mapper function which creates a set of key values (i,k) containing the values associated with the j pairs. The values associated with the same (i,k) key are the summed and emitted by the reducer function in order to get the final result.
+
+Main difference, algorithm 1 uses two steps. Two mappers, two reducers. Simplifies process of mapping to a key. Values associated with matrices, value 0 equals matrix 1. Ensures correct matrice is being multiplied. Split values in reducer, yields new key and new value.
+
+\subsection{Algorithm 2}
+
+Single map and reducer stage. Key has an index. Sorts them by j.Multiply corresponding entries with the same j value.
+\end{document}

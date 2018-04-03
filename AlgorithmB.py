@@ -4,11 +4,10 @@ import os
 
 class MatrixMultiplication(MRJob):
 
-    f = open('outputAlgorithm2.txt', 'w')
+    f = open('OutputAlgorithmB.txt', 'w')
 
     def mapper(self, _, line):
         # This function automatically reads in lines of code
-        filename = os.environ['mapreduce_map_input_file']
         line = line.split()
         line = list(map(int, line))
         # if len(line) == 2 and filename == 'testMatrix.txt':

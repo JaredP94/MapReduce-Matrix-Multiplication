@@ -4,7 +4,7 @@ import os
 
 class MatrixMultiplication(MRJob):
 
-    f = open('outputAlgorithm1.txt', 'w')
+    f = open('OutputAlgorithmA.txt', 'w')
 
     def mapper(self, _, line):
         # This function automatically reads in lines of code

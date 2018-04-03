@@ -1,0 +1,4 @@
+#!/bin/bash
+
+python lab3-singleInput.py File2ForLab3.txt
+python lab3-multipleInputTextfile3.py File2ForLab3.txt partialOutputQ6.txt

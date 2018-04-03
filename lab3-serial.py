@@ -4,19 +4,16 @@ import os
 
 class MatrixMultiplication(MRJob):
 
+    f = open('outputAlgorithm1.txt', 'w')
+
     def mapper(self, _, line):
         # This function automatically reads in lines of code
         line = line.split()
         line = list(map(int, line))
         row, col, value = line
 
-        filename = os.environ['mapreduce_map_input_file']
-
-        if filename == 'testMatrix.txt':
-            yield col, (0, row, value)
-
-        elif filename == 'testMatrix2.txt':
-            yield row,  (1, col, value)
+        yield col, (0, row, value)
+        yield row,  (1, col, value)
 
     def reducer_multiply(self, keys, values):
         matrix0=[]
@@ -38,7 +35,12 @@ class MatrixMultiplication(MRJob):
         yield key, value
 
     def reducer_sum(self, key, values):
-        yield key, sum(values)
+        total = sum(values)
+        yield key, total
+        x = key[0]
+        y = key[1]
+        self.f.write(str(x) + " " + str(y) + " ")
+        self.f.write(str(total) + "\n")
 
     def steps(self): return [
         MRStep(mapper=self.mapper,

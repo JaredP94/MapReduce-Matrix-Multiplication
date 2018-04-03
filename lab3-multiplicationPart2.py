@@ -14,10 +14,10 @@ class MatrixMultiplication(MRJob):
 
         filename = os.environ['mapreduce_map_input_file']
 
-        if filename == 'testMatrix.txt':
+        if filename == 'File2ForLab3.txt':
             yield col, (0, row, value)
 
-        elif filename == 'testMatrix3.txt':
+        elif filename == 'partialOutputQ6.txt':
             yield row,  (1, col, value)
 
     def reducer_multiply(self, keys, values):

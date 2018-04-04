@@ -136,9 +136,9 @@
 %
 \section{Matrix Multiplication}
 
-The input to map function consists of a text file containing a matrix formatted as a list of strings. The first row of the file provides the dimensions of the given matrix. The proceeding rows contain three columns, the first two representing the row and column index of the element and the third the value of the element.
+The input to the map function is a text file containing a input matrix written in Matrix-Market format. The first row of the file provides the dimensions of the matrix. The following rows contain three columns, with the first two representing the row and column index of the element and the third the value of the element.
 
-Each matrix is read in of the form $M_{ij}$ and $N_{jk}$ where i represents the row elements and j the column elements. The product matrix is therefore represented as $P_{i,j} = M_{ij} * N_{jk}$. This is achieved by taking the first row of M and multiplying it by the first column in N and summing the values. This function is performed for every column in B before repeating the process for every row in A. 
+The product matrix is represented as $P_{ik} = M_{ij} * N_{jk}$, where $M_{ij}$ and $N_{jk}$ are the input matrices. In order to perform the multiplication, the first row of M is multiplied by the first column in N and the resultant values are summed. This process is performed for every combination of rows in M and columns in N. 
 
 \section{Map Reduce \& MrJob}
 

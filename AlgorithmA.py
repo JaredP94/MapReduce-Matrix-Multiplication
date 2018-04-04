@@ -77,4 +77,4 @@ if __name__ == '__main__':
     totalWithoutWrite = t1 - t0
     totalWithWrite = t2 - t00
     print ("Total time for algorithmA: " + str(totalWithoutWrite))
-    print ("Total time for algorithmA with writing to file: " + str(totalWithWrite))
+    #print ("Total time for algorithmA with writing to file: " + str(totalWithWrite))

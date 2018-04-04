@@ -1,7 +1,9 @@
 from mrjob.job import MRJob
 from mrjob.step import MRStep
 import os
+import time
 
+t00=time.time()
 inputfile = open('File1ForLab3.txt','r+')
 linesOfFile=inputfile.readlines()
 noOfRows, noOfCols = linesOfFile[0].split()
@@ -58,7 +60,9 @@ class MatrixMultiplication(MRJob):
         ]
 
 if __name__ == '__main__':
+    t0 = time.time()
     MatrixMultiplication.run()
+    t1 = time.time()
 
     # Open file and write dimensions back
     inputfile = open('File1ForLab3.txt','r+')
@@ -67,3 +71,10 @@ if __name__ == '__main__':
     linesOfFile.insert(0, string1)
     inputfile.seek(0)
     inputfile.writelines(linesOfFile)
+
+    t2 = time.time()
+
+    totalWithoutWrite = t1 - t0
+    totalWithWrite = t2 - t00
+    print ("Total time for algorithmA: " + str(totalWithoutWrite))
+    print ("Total time for algorithmA with writing to file: " + str(totalWithWrite))

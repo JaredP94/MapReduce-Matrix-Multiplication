@@ -74,11 +74,3 @@ class MatrixMultiplication(MRJob):
 
 if __name__ == '__main__':
     MatrixMultiplication.run()
-
-    # Open file and write dimensions back
-    inputfile = open('File2ForLab3.txt','r+')
-    linesOfFile=inputfile.readlines()
-    string1 = str(noOfRows)+ " "+ str(noOfCols) + '\n'
-    linesOfFile.insert(0, string1)
-    inputfile.seek(0)
-    inputfile.writelines(linesOfFile)

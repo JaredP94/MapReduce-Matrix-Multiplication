@@ -1,6 +1,14 @@
+import os
 from mrjob.job import MRJob
 from mrjob.step import MRStep
-import os
+
+inputfile = open('File1ForLab3.txt','r+')
+linesOfFile=inputfile.readlines()
+noOfRows, noOfCols = linesOfFile[0].split()
+inputfile.seek(0)
+inputfile.writelines(linesOfFile[1:])
+inputfile.truncate()
+inputfile.close()
 
 class MatrixMultiplication(MRJob):
 
@@ -10,20 +18,12 @@ class MatrixMultiplication(MRJob):
         # This function automatically reads in lines of code
         line = line.split()
         line = list(map(int, line))
-        # if len(line) == 2 and filename == 'testMatrix.txt':
-        #     print("length of line is 2")
-        #     self.row0, _ = line
-        #     # yield _,(rows,columns)
-        # elif len(line) == 2 and filename == 'testMatrix2.txt':
-        #     _, self.col0 = line
-        #     print(self.col0)
-        # else:
         row, col, value = line
 
-        for i in range(0,3): ### NB: Range here needs to go to number of columns of matrix2
+        for i in range(0,int(noOfCols)):
             yield (row, i), (0, col, value)
 
-        for j in range(0, 3): ### NB: Range here needs to go to number of rows of matrix1
+        for j in range(0, int(noOfRows)):
             yield (j, col), (1, row, value)
 
     def reducer_multiply(self, keys, values):
@@ -64,3 +64,12 @@ class MatrixMultiplication(MRJob):
 
 if __name__ == '__main__':
     MatrixMultiplication.run()
+
+    inputfile = open('File1ForLab3.txt','r+')
+    linesOfFile=inputfile.readlines()
+
+    string1 = str(noOfRows)+ " "+ str(noOfCols) + '\n'
+    linesOfFile.insert(0, string1)
+
+    inputfile.seek(0)
+    inputfile.writelines(linesOfFile)

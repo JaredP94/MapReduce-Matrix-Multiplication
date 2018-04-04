@@ -140,27 +140,29 @@ The input to the map function is a text file containing a input matrix written i
 
 The product matrix is represented as $P_{ik} = M_{ij} * N_{jk}$, where $M_{ij}$ and $N_{jk}$ are the input matrices. In order to perform the multiplication, the first row of M is multiplied by the first column in N and the resultant values are summed. This process is performed for every combination of rows in M and columns in N. 
 
-\section{Map Reduce \& MrJob}
+\section{MapReduce \& MrJob}
 
-In order to perform matrix multiplication for large matrices, a MapReduce algorithm was implemented. The algorithm consists of two distinct features, namely the \verb|map()| function and \verb|reduce()| function. 
+In order to perform matrix multiplication for large matrices, a MapReduce algorithm was implemented. The algorithm consists of two distinct parts, namely the \verb|map()| function and \verb|reduce()| function. 
 
-The map function transforms the input script into a format which can be used by the reducer in order to perform calculations. The input matrix to the map function is of the form (row, column, value). This data is then assigned a key (i, j, k) in order to produce a key-value format at the output.
+The \texttt{map} function takes as an input a key and a value and emits key-value pairs. The \texttt{reduce} function then makes use of the output from the \texttt{map} function. It takes as inputs a key and a list of values associated with the key and performs an action of the values. It also emits key-value pairs.
 
-The reduce function makes use of the output from the map. 
-
-The reduce algorithm performs two functions. The reduce function performs computations on the key-value output pairs produced by the map function. The reduce function is required to accept two input values on which the computations are made reducing them to a single product. In the case of Algorithm 1, the reducer performs two tasks. The first task performs the multiplication of the values found at each key (i,k) preparing them for summation in the process. The second task sums output values from the multiplication at each key and emits the result.
-
-MrJob is a python-based MapReduce framework. MrJob provides an environment allowing multiple one-step jobs to be executed within the program. A job consists of a unique class found within the MrJob library which defines the steps involved in each job. The step can  consist of a combination of \verb|mapper()|, \verb|combiner()| and \verb|reducer| functions. The input data is read in one line at a time. The mapper function performs the role of map in MapReduce allocating key-value pairs to each line of text input. Similarly, the \verb|reducer()| performs the reduce task in order to output a single value for each key-value pair.  Each yeild function found at the end of the mapper and reducer is responsible for a single line of output code.
+MrJob is a python-based MapReduce framework. MrJob provides an environment allowing multiple one-step jobs to be executed within the program. A job consists of a unique class found within the MrJob library which defines the steps involved in each job. The step can consist of a combination of \verb|mapper()|, \verb|combiner()| and \verb|reducer| functions. The input data is read in one line at a time. The mapper function performs the role of map in MapReduce allocating key-value pairs to each line of text input. Similarly, the \verb|reducer()| performs the reduce task in order to output a single value for each key-value pair.  Each yeild function found at the end of the mapper and reducer is responsible for a single line of output code.
 
 MrJob is preferable in it's application as the code has no dependencies with Hadoop in comparison to the other frameworks. the framework was also chosen due to documentation being more readily available and easier to implement.
 
 \section{Multiplication}
+Two algorithms for performing matrix multiplication with MapReduce were implemented. Since the matrix is to be multiplied with itself, only one matrix is taken as an input to the job.
+
+In both the algorithms, the \texttt{map} function transforms the input file into a format which can be used by the reducer to perform the necessary calculations. The input data to the map function is a line from the text file in the form \textit{row column value}. The data is then assigned a key so that a key-value pair can be yielded from the function.
+
+The \texttt{reduce} function performs computations on the key-value pairs produced by the \texttt{map} function in order to produce the product matrix.
 
 \subsection{Algorithm A} \label{algA}
+In Algorithm A, two MapReduce steps are used, meaning that a mapper and reducer stage are used, followed by a second mapper and reducer stage.
 
-Algorithm A performs two iterations of the MapReduce procedure.  This results in two mapper and reducer functions being executed. This simplifies the process of mapping a key by grouping the values according to a common j element before summing the values to produce the output matrix. 
+In the first iteration, the algorithm takes in one matrix
 
-In the first iteration, the algorithm takes in two matrices as input in the form $M(I, J, V )$ and $N(J, K, W)$. In the first iteration, the map performs a join between the two matrices, $M_{ij}$ and $N_{jk}$ Each matrix elements value within is assigned a key according to it's j value which is common to both matrices. For the first matrix, the pair in the form $(M, i, m_{ij})$ is created with $m_{ij}$ representing the value of each element in the M matrix. The same is done for the second matrix, producing the j key-pair in the form $(N, k, n_{jk})$. The M and N values within each pair are assigned 0 and 1 respectively in order to represent which matrix the pair belongs to.
+in two matrices as input in the form $M(i, j, v)$ and $N(j, k, w)$. In the first iteration, the map performs a join between the two matrices, $M_{ij}$ and $N_{jk}$. Each matrix elements value within is assigned a key according to it's j value which is common to both matrices. For the first matrix, the pair in the form $(M, i, m_{ij})$ is created with $m_{ij}$ representing the value of each element in the M matrix. The same is done for the second matrix, producing the j key-pair in the form $(N, k, n_{jk})$. The M and N values within each pair are assigned 0 and 1 respectively in order to represent which matrix the pair belongs to.
 
 The reduce function in the first iteration combines each element value in M with its corresponding value in N and emits the key value pair  $(i, k, m_{ij}n_{jk})$ for the corresponding j key-value pair. This is simply a grouping however meaning an extra step is necessary to find the product of the two values. The output of the reduce function is then used as the input to the map function in the second iteration.
 
@@ -187,7 +189,7 @@ According to \cite{pathLength3}, the total number of paths of length 3 from j to
 
  \begin{equation}
 N_{ij}^{3} = \sum _{k,l = 1}^{n} A_{ik}A_{kl}A_{ij} = [G^{3}]_{ij}
-\label{eqn:multiply}
+\label{eqn:multiply1}
 \end{equation}
 
 Where:
@@ -195,9 +197,9 @@ Where:
 	$G = (v,e)$           &  is an unweighted directed graph of $\mid v \mid$ nodes and $\mid e \mid$ edges \\
 \end{tabular}
 
-From Equation \ref{eqn:multiply}, it is evident that the most efficient way to represent G is in matrix form. Since the majority of the values in the G matrix are 0, all zero value entires should be emitted from the input file.
+From Equation \ref{eqn:multiply1}, it is evident that the most efficient way to represent G is in matrix form. Since the majority of the values in the G matrix are 0, all zero value entires should be emitted from the input file.
 
-From Equation \ref{eqn:multiply}, in order to calculate the pairs of nodes that are connected by paths of length 3, the input matrix \textit{File2ForLab3.txt} must be cubed.
+From Equation \ref{eqn:multiply1}, in order to calculate the pairs of nodes that are connected by paths of length 3, the input matrix \textit{File2ForLab3.txt} must be cubed.
 
 In order to perform the calculation, multiplication algorithm A was used. First, the input text file was multiplied with itself to result in A$^{2}$. Then, the resulting matrix was multiplied with the input text file to result in A$^{3}$. In order to count the number of paths, the resulting matrix entries were summed, and this value indicates the total number of paths of length 3.
 

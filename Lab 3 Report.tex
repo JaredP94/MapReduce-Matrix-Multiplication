@@ -146,9 +146,12 @@ In order to perform matrix multiplication for large matrices, a MapReduce algori
 
 The \texttt{map} function takes as an input a key and a value and emits key-value pairs. The \texttt{reduce} function then makes use of the output from the \texttt{map} function. It takes as inputs a key and a list of values associated with the key and performs an action of the values. It also emits key-value pairs.
 
-MrJob is a python-based MapReduce framework. MrJob provides an environment allowing multiple one-step jobs to be executed within the program. A job consists of a unique class found within the MrJob library which defines the steps involved in each job. The step can consist of a combination of \verb|mapper()|, \verb|combiner()| and \verb|reducer| functions. The input data is read in one line at a time. The mapper function performs the role of map in MapReduce allocating key-value pairs to each line of text input. Similarly, the \verb|reducer()| performs the reduce task in order to output a single value for each key-value pair.  Each yeild function found at the end of the mapper and reducer is responsible for a single line of output code.
+MrJob is a MapReduce framework which provides an environment which allows multi-step MapReduce jobs to be written in Python and run on a variety platforms~\cite{mrjob}. A job is defined by class which inherits from \texttt{MRJob}, and which contains the functions which define the \texttt{steps} of the job. Each \texttt{step} consists of a \texttt{mapper}, a \texttt{combiner} and a \texttt{reducer}, of which you must use at least one~\cite{mrjob}.
 
-MrJob is preferable in it's application as the code has no dependencies with Hadoop in comparison to the other frameworks. the framework was also chosen due to documentation being more readily available and easier to implement.
+% not sure about this one
+The input data is read in one line at a time. The \texttt{mapper} function performs the role of map in MapReduce allocating key-value pairs to each line of text input. Similarly, the \verb|reducer()| performs the reduce task in order to output a single value for each key-value pair. Each yield function found at the end of the mapper and reducer is responsible for a single line of output code.
+
+MrJob is intended as an easy way to write Python programs that run on Hadoop. Using MrJob, one is able to test the code locally, without installing Hadoop, before you deploy the code on your cluster. For the purpose of this laboratory, this local approach was used. Additionally, MrJob was preferred over other Python MapReduce libraries owing to its relative ease of implementation and availability of documentation.
 
 \section{Multiplication}
 Two algorithms for performing matrix multiplication with MapReduce were implemented. Since the matrix is to be multiplied with itself, only one matrix is taken as an input to the job.

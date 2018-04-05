@@ -167,7 +167,9 @@ In the first step, the algorithm takes in one matrix which is viewed as two matr
 
 The value of each element in the two matrices is assigned a key according to it's j value which is common to both matrices. For the first matrix (M), the key j is emitted corresponding to the value $(0, i, m_{ij})$, where 0 is used as an identifier for matrix M. Likewise, for matrix N, the key j is emitted and its corresponding value is $(1, k, n_{jk})$. For matrix N, 1 is used as an identifier. Since only one input matrix is used, for each line of the input file, both of the above mentioned key-value pairs are emitted.
 
-In the reduce function in the first step, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$) are multiplied and the key-value pair j, $(i, k, m_{ij}n_{jk})$ is emitted. The output of the reduce function is then used as the input to the map function in the second step.
+In the reduce function in the first step, the values corresponding to the key are divided into two matrices: matrix0 and matrix1 according to the first entry of the value. If the first entry of the value is 0, the value is appended onto matrix0 and likewise for matrix1. Thereafter, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$ from matrix0 and matrix1 respectively) are multiplied and the key-value pair j, $(i, k, m_{ij}n_{jk})$ is emitted.
+
+The output of the reduce function is then used as the input to the map function in the second step.
 
 In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the mapper stage. The i value represents the row index of the product matrix and k represents the column index. 
 
@@ -175,11 +177,13 @@ In the final reducer stage, all the values corresponding to each key are summed.
 
 \subsection{Algorithm B}
 
-Algorithm B makes use of a single map and reduce stage. Instead of originally producing key-value pairs according to each j element, the map function creates (i,k) key-value pairs for each matrix containing the common j element. For M, the pair  $(M, j, m_{ij})$ is created for each value of k according to the number of columns contained within the N matrix. The same is done for matrix N, $(N, j,n_{jk})$, with a pair created for a unique i value according to the number of rows within the M matrix. Once again, The M and N values of each pair are represented as 0 and 1's respectively in order to identify which key belongs to each matrix.
-	
-The yeild of the map function is then used as the input to the reducer. The key (i,k) represents the row and column index's of the product matrix. The function sorts the values in matrix M according to j in the key-value pair list. This is then repeated for matrix N. Values $m_{ij}$ and $n_{jk}$ at the $j_{th}$ element of each list are the multiplied together before being summed together to produce the final value at the row, column index. 
+Algorithm B makes use of a single map and reduce step. In the mapper stage, for matrix M, the key-value pair is $((i, k), (0, j, m_{ij}))$ for each value $m_{ij}$ of M. The variable k goes from 1 to the number of columns of N. 
 
-this product is represented mathematically by the following equation:
+Instead of originally producing key-value pairs according to each j element, the map function creates (i,k) key-value pairs for each matrix containing the common j element. For M, the pair $(M, j, m_{ij})$ is created for each value of k according to the number of columns contained within the N matrix. The same is done for matrix N, $(N, j,n_{jk})$, with a pair created for a unique i value according to the number of rows within the M matrix. Once again, The M and N values of each pair are represented as 0 and 1's respectively in order to identify which key belongs to each matrix.
+	
+The yield of the map function is then used as the input to the reducer. The key (i,k) represents the row and column index's of the product matrix. The function sorts the values in matrix M according to j in the key-value pair list. This is then repeated for matrix N. Values $m_{ij}$ and $n_{jk}$ at the $j_{th}$ element of each list are the multiplied together before being summed together to produce the final value at the row, column index. 
+
+This product is represented mathematically by the following equation:
 
  \begin{equation}
 P_{ik}= \sum _{j = 1} m_{ij} * n_{jk}

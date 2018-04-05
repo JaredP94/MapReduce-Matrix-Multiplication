@@ -163,13 +163,13 @@ The \texttt{reduce} function performs computations on the key-value pairs produc
 \subsection{Algorithm A} \label{algA}
 In Algorithm A, two MapReduce steps are used, meaning that a mapper and reducer stage are used, followed by a second mapper and reducer stage.
 
-In the first iteration, the algorithm takes in one matrix
+In the first step, the algorithm takes in one matrix which is viewed as two matrices for the calculations. The matrix is thus represented as $M(I, J, V)$ with tuples $(i, j, m_{ij})$ and $N(J, K, W)$ with tuples $(j, k, n_{jk})$. These tuples represent the (row index, column index, value).
 
-in two matrices as input in the form $M(i, j, v)$ and $N(j, k, w)$. In the first iteration, the map performs a join between the two matrices, $M_{ij}$ and $N_{jk}$. Each matrix elements value within is assigned a key according to it's j value which is common to both matrices. For the first matrix, the pair in the form $(M, i, m_{ij})$ is created with $m_{ij}$ representing the value of each element in the M matrix. The same is done for the second matrix, producing the j key-pair in the form $(N, k, n_{jk})$. The M and N values within each pair are assigned 0 and 1 respectively in order to represent which matrix the pair belongs to.
+The value of each element in the two matrices is assigned a key according to it's j value which is common to both matrices. For the first matrix (M), the key j is emitted corresponding to the value $(0, i, m_{ij})$, where 0 is used as an identifier for matrix M. Likewise, for matrix N, the key j is emitted and its corresponding value is $(1, k, n_{jk})$. For matrix N, 1 is used as an identifier. Since only one input matrix is used, for each line of the input file, both of the above mentioned key-value pairs are emitted.
 
-The reduce function in the first iteration combines each element value in M with its corresponding value in N and emits the key value pair  $(i, k, m_{ij}n_{jk})$ for the corresponding j key-value pair. This is simply a grouping however meaning an extra step is necessary to find the product of the two values. The output of the reduce function is then used as the input to the map function in the second iteration.
+In the reduce function in the first step, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$) are multiplied and the key-value pair j, $(i, k, m_{ij}n_{jk})$ is emitted. The output of the reduce function is then used as the input to the map function in the second step.
 
-In the next iteration, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$. Each i value will represent the row index of the product matrix and k representing the column index. 
+In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the mapper stage. Each i value will represent the row index of the product matrix and k representing the column index. 
 
 The reducer emits each pair and splits the values. The yield then produces a new key and sums the given values assigned with each pair. The new key represents the value of at each row, column index within the product matrix.
 

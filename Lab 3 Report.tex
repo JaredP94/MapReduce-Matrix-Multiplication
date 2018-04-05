@@ -169,9 +169,9 @@ The value of each element in the two matrices is assigned a key according to it'
 
 In the reduce function in the first step, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$) are multiplied and the key-value pair j, $(i, k, m_{ij}n_{jk})$ is emitted. The output of the reduce function is then used as the input to the map function in the second step.
 
-In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the mapper stage. Each i value will represent the row index of the product matrix and k representing the column index. 
+In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the mapper stage. The i value represents the row index of the product matrix and k represents the column index. 
 
-The reducer emits each pair and splits the values. The yield then produces a new key and sums the given values assigned with each pair. The new key represents the value of at each row, column index within the product matrix.
+In the final reducer stage, all the values corresponding to each key are summed. This allows for the resultant value at each matrix index to be calculated. Then, a final key-value pair is emitted where the key represents the row index and column index of the entry in the product matrix, and the value is the final value at each index.
 
 \subsection{Algorithm B}
 

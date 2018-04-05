@@ -5,8 +5,8 @@ The github repository for this laboratory can be found at:
 
 To clone our github repository, one of two urls can be used:
 
-HTTP
-SSH
+HTTP 
+SSH git@github.com:JaredP94/ELEN4020-Lab3.git
 
 ---------------------------------------------------------------------------
 ## BRANCHES:

@@ -14,10 +14,10 @@ SSH
 ### Solution      Contains the code implementation for lab exercise 3
 
 To run the input files:
-AlgorithmA: ~~~ python AlgorithmA.py File1ForLab3.txt ~~~
-AlgorithmB: ~~~ python AlgorithmB.py File1ForLab3.txt ~~~
+AlgorithmA: ``` python AlgorithmA.py File1ForLab3.txt ```
+AlgorithmB: ``` python AlgorithmB.py File1ForLab3.txt ```
 
-To run question 6, the script script must be run. In order to do this, type ./script
+To run question 6, the script script must be run. In order to do this, run ``` ./script ```
 
 ### Documentation     Contains the .tex and .pdf files of our report for lab exercise 3.
 

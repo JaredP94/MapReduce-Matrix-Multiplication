@@ -167,11 +167,11 @@ In the first step, the algorithm takes in one matrix which is viewed as two matr
 
 The value of each element in the two matrices is assigned a key according to it's j value which is common to both matrices. For the first matrix (M), the key j is emitted corresponding to the value $(0, i, m_{ij})$, where 0 is used as an identifier for matrix M. Likewise, for matrix N, the key j is emitted and its corresponding value is $(1, k, n_{jk})$. For matrix N, 1 is used as an identifier. Since only one input matrix is used, for each line of the input file, both of the above mentioned key-value pairs are emitted.
 
-In the reduce function in the first step, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$) are multiplied and the key-value pair j, $(i, k, m_{ij}n_{jk})$ is emitted. The output of the reduce function is then used as the input to the map function in the second step.
+In the \texttt{reducer} function in the first step, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$) are multiplied and the key-value pair (j, $(i, k, m_{ij}n_{jk})$) is emitted. The output of the \texttt{reducer} function is then used as the input to the \texttt{mapper} function in the second step.
 
-In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the mapper stage. The i value represents the row index of the product matrix and k represents the column index. 
+In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the \texttt{mapper} stage. The i value represents the row index of the product matrix and k represents the column index. 
 
-In the final reducer stage, all the values corresponding to each key are summed. This allows for the resultant value at each matrix index to be calculated. Then, a final key-value pair is emitted where the key represents the row index and column index of the entry in the product matrix, and the value is the final value at each index.
+In the final \texttt{reducer} stage, all the values corresponding to each key are summed. This allows for the resultant value at each matrix index to be calculated. Then, a final key-value pair is emitted where the key represents the row index and column index of the entry in the product matrix, and the value is the final value at each index.
 
 \subsection{Algorithm B}
 

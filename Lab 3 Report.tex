@@ -177,18 +177,15 @@ In the final reducer stage, all the values corresponding to each key are summed.
 
 \subsection{Algorithm B}
 
-Algorithm B makes use of a single map and reduce step. In the mapper stage, for matrix M, the key-value pair is $((i, k), (0, j, m_{ij}))$ for each value $m_{ij}$ of M. The variable k goes from 1 to the number of columns of N. 
+Algorithm B makes use of a combined map and reduce step and a reduce step. In the  \texttt{mapper} stage, for matrix M, the key-value pair is $((i, k), (0, j, m_{ij}))$ for each value $m_{ij}$ of M. The variable k goes from 1 to the number of columns of N. In order to implement this, a for loop was created ranging from 0 to the number of columns of in. Within the for loop, a key-value pair is emitted for each value of k.
 
-Instead of originally producing key-value pairs according to each j element, the map function creates (i,k) key-value pairs for each matrix containing the common j element. For M, the pair $(M, j, m_{ij})$ is created for each value of k according to the number of columns contained within the N matrix. The same is done for matrix N, $(N, j,n_{jk})$, with a pair created for a unique i value according to the number of rows within the M matrix. Once again, The M and N values of each pair are represented as 0 and 1's respectively in order to identify which key belongs to each matrix.
+Likewise, for matrix N, the key-value pair is $((i, k), (1, j, n_{jk}))$ for each value $n_{jk}$ of N. The variable i goes from 1 to the number of rows of M. The key-value pairs were then emitted as described above.
 	
-The yield of the map function is then used as the input to the reducer. The key (i,k) represents the row and column index's of the product matrix. The function sorts the values in matrix M according to j in the key-value pair list. This is then repeated for matrix N. Values $m_{ij}$ and $n_{jk}$ at the $j_{th}$ element of each list are the multiplied together before being summed together to produce the final value at the row, column index. 
+The output of the map function is then used as the input to the reducer. 
 
-This product is represented mathematically by the following equation:
+In the first reducer, the key (i,k) represents the row and column index of the product matrix. First, the values corresponding to the key are divided into two matrices: matrix0 and matrix1 according to the first entry of the value. If the first entry of the value is 0, the value is appended onto matrix0 and likewise for matrix1. Next, for each key, the values in matrix M are sorted according to their j values. This is then repeated for matrix N. Finally, the values $m_{ij}$ and $n_{jk}$ at the $j_{th}$ index of each list are the multiplied together for each value of j. 
 
- \begin{equation}
-P_{ik}= \sum _{j = 1} m_{ij} * n_{jk}
-\label{eqn:multiply}
-\end{equation}
+In the second reducer, the values corresponding to each key are calculated. Then, a final key-value pair is emitted where the key represents the row index and column index of the entry in the product matrix, and the value is the final value at each index.
 
 \section{Pairs of Nodes Connected by Paths of Length 3}
 \subsection{Overview}

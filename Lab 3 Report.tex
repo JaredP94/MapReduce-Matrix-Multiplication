@@ -216,9 +216,24 @@ In order to run the two classes, a bash script was created. Within this script, 
 
 \section{Results}
 
-From the tables below, it is evident that Algorithm B was found to perform best. This result was obtained by performing a timed benchmark on the multiplication of two 3 x 3 matrices.
+From the tables below, it is evident that Algorithm B was found to perform best. This result was obtained by performing a timed benchmark on the multiplication of two 3 x 3 matrices. The matrix used is matrix M a given below.
 
+$ M = \begin{bmatrix}
+0 &1 &6\\
+6 &0 &1\\
+4 &0 &0\\
+\end{bmatrix} $
 
+The resultant matrix is:
+$ P = \begin{bmatrix}
+30 &0 &1\\
+4 &6 &36\\
+0 &4 &24\\
+\end{bmatrix} $
+
+\begin{table}[h]
+		\centering
+		\caption{Time taken to multiply two 3x3 matrices using Algorithm A and B}
 \begin{tabular}{|l|l|}
 	\hline 
 	\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
@@ -228,6 +243,7 @@ From the tables below, it is evident that Algorithm B was found to perform best.
 	 B & 0.4359998703 \\ 
 	\hline 
 \end{tabular} 
+\end{table}
 
 
 

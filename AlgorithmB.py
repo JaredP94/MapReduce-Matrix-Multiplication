@@ -4,29 +4,43 @@ from mrjob.step import MRStep
 import time
 
 t00=time.time()
-inputfile = open('File1ForLab3.txt','r+')
+inputfile = open('outA3.list','r+')
 linesOfFile=inputfile.readlines()
-noOfRows, noOfCols = linesOfFile[0].split()
-inputfile.seek(0)
-inputfile.writelines(linesOfFile[1:])
-inputfile.truncate()
-inputfile.close()
+noOfRows, _ = linesOfFile[0].split()
+
+inputfile2 = open('outB3.list','r+')
+linesOfFile2=inputfile2.readlines()
+_, noOfCols = linesOfFile2[0].split()
+
+counter = 0
 
 class MatrixMultiplication(MRJob):
 
     f = open('OutputAlgorithmB.txt', 'w')
 
     def mapper(self, _, line):
+        global counter
         # This function automatically reads in lines of code
         line = line.split()
         line = list(map(int, line))
-        row, col, value = line
 
-        for i in range(0,int(noOfCols)):
-            yield (row, i), (0, col, value)
+        if len(line) == 3:
+            row, col, value = line
+        elif len(line) == 2 and counter == 1:
+            row, value = line
+            col = 0
+        elif len(line) == 2 and counter == 0:
+            counter = 1
+            return
 
-        for j in range(0, int(noOfRows)):
-            yield (j, col), (1, row, value)
+        filename = os.environ['mapreduce_map_input_file']
+
+        if 'A' in filename:
+            for i in range(0,int(noOfCols)):
+                yield (row, i), (0, col, value)
+        elif 'B' in filename:
+            for j in range(0, int(noOfRows)):
+                yield (j, col), (1, row, value)
 
     def reducer_multiply(self, keys, values):
         matrix0=[]
@@ -66,18 +80,6 @@ if __name__ == '__main__':
     MatrixMultiplication.run()
     t1 = time.time()
 
-    inputfile = open('File1ForLab3.txt','r+')
-    linesOfFile=inputfile.readlines()
-
-    string1 = str(noOfRows)+ " "+ str(noOfCols) + '\n'
-    linesOfFile.insert(0, string1)
-
-    inputfile.seek(0)
-    inputfile.writelines(linesOfFile)
-
-    t2 = time.time()
-
     totalWithoutWrite = t1 - t0
-    totalWithWrite = t2 - t00
     print ("Total time for algorithmB: " + str(totalWithoutWrite))
     #print ("Total time for algorithmB with writing to file: " + str(totalWithWrite))

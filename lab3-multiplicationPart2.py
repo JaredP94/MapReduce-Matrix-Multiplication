@@ -14,7 +14,7 @@ class MatrixMultiplication(MRJob):
 
         filename = os.environ['mapreduce_map_input_file']
 
-        if filename == 'File2ForLab3.txt':
+        if filename == 'newinputQ6.txt':
             yield col, (0, row, value)
 
         elif filename == 'partialOutputQ6.txt':

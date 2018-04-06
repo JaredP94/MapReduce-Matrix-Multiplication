@@ -216,33 +216,61 @@ In order to run the two classes, a bash script was created. Within this script, 
 
 \section{Results}
 
-From the tables below, it is evident that Algorithm B was found to perform best. This result was obtained by performing a timed benchmark on the multiplication of two 3 x 3 matrices. The matrix used is matrix M a given below.
+%From the tables below, it is evident that Algorithm B was found to perform best. This result was obtained by performing a timed benchmark on the multiplication of two 3 x 3 matrices. The matrix used is matrix M a given below.
 
-$ M = \begin{bmatrix}
-0 &1 &6\\
-6 &0 &1\\
-4 &0 &0\\
-\end{bmatrix} $
-
-The resultant matrix is:
-$ P = \begin{bmatrix}
-30 &0 &1\\
-4 &6 &36\\
-0 &4 &24\\
-\end{bmatrix} $
+%$ M = \begin{bmatrix}
+%0 &1 &6\\
+%6 &0 &1\\
+%4 &0 &0\\
+%\end{bmatrix} $
+%
+%The resultant matrix is:
+%$ P = \begin{bmatrix}
+%30 &0 &1\\
+%4 &6 &36\\
+%0 &4 &24\\
+%\end{bmatrix} $
 
 \begin{table}[h]
 		\centering
-		\caption{Time taken to multiply two 3x3 matrices using Algorithm A and B}
+		\caption{Time taken to multiply outA1 and outB1 matrices using Algorithm A and B}
 \begin{tabular}{|l|l|}
 	\hline 
 	\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
 	\hline 
-	 A & 0.4670000076 \\ 
+	 A & 52.20356583595276 \\ 
 	\hline 
-	 B & 0.4359998703 \\ 
+	 B & 106.5891628265380 \\ 
 	\hline 
 \end{tabular} 
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{Time taken to multiply outA2 and outB2 matrices using Algorithm A and B}
+	\begin{tabular}{|l|l|}
+		\hline 
+		\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
+		\hline 
+		A &  \\ 
+		\hline 
+		B &  \\ 
+		\hline 
+	\end{tabular} 
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{Time taken to multiply outA3 and outB3 matrices using Algorithm A and B}
+	\begin{tabular}{|l|l|}
+		\hline 
+		\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
+		\hline 
+		A & 47.3928279876709 \\ 
+		\hline 
+		B & 91.8078939914703 \\ 
+		\hline 
+	\end{tabular} 
 \end{table}
 
 

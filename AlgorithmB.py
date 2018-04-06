@@ -4,15 +4,43 @@ from mrjob.step import MRStep
 import time
 
 t00=time.time()
-inputfile = open('File1ForLab3.txt','r+')
+inputfile = open('outA1.list','r+')
 linesOfFile=inputfile.readlines()
-noOfRows, noOfCols = linesOfFile[0].split()
+noOfRows, _ = linesOfFile[0].split()
 inputfile.seek(0)
 inputfile.writelines(linesOfFile[1:])
 inputfile.truncate()
 inputfile.close()
 
+inputfile2 = open('outB1.list','r+')
+linesOfFile2=inputfile2.readlines()
+_, noOfCols = linesOfFile2[0].split()
+inputfile2.seek(0)
+inputfile2.writelines(linesOfFile2[1:])
+inputfile2.truncate()
+inputfile2.close()
+
 class MatrixMultiplication(MRJob):
+
+    # def __init__(self, *args, **kwargs):
+        # super(MatrixMultiplication, self).__init__(*args, **kwargs)
+        # filename = os.environ['mapreduce_map_input_file']
+        # if "A" in filename:
+        #     inputfile = open(filename,'r+')
+        #     linesOfFile=inputfile.readlines()
+        #     noOfRows, _ = linesOfFile[0].split()
+        #     inputfile.seek(0)
+        #     inputfile.writelines(linesOfFile[1:])
+        #     inputfile.truncate()
+        #     inputfile.close()
+        # elif "B" in filename:
+        #     inputfile2 = open(filename,'r+')
+        #     linesOfFile2=inputfile2.readlines()
+        #     _, noOfCols = linesOfFile2[0].split()
+        #     inputfile2.seek(0)
+        #     inputfile2.writelines(linesOfFile2[1:])
+        #     inputfile2.truncate()
+        #     inputfile2.close()
 
     f = open('OutputAlgorithmB.txt', 'w')
 
@@ -21,12 +49,14 @@ class MatrixMultiplication(MRJob):
         line = line.split()
         line = list(map(int, line))
         row, col, value = line
+        filename = os.environ['mapreduce_map_input_file']
 
-        for i in range(0,int(noOfCols)):
-            yield (row, i), (0, col, value)
-
-        for j in range(0, int(noOfRows)):
-            yield (j, col), (1, row, value)
+        if 'A' in filename:
+            for i in range(0,int(noOfCols)):
+                yield (row, i), (0, col, value)
+        elif 'B' in filename:
+            for j in range(0, int(noOfRows)):
+                yield (j, col), (1, row, value)
 
     def reducer_multiply(self, keys, values):
         matrix0=[]

@@ -4,13 +4,21 @@ import os
 import time
 
 t00=time.time()
-inputfile = open('File1ForLab3.txt','r+')
+inputfile = open('outA2.list','r+')
 linesOfFile=inputfile.readlines()
 noOfRows, noOfCols = linesOfFile[0].split()
 inputfile.seek(0)
 inputfile.writelines(linesOfFile[1:])
 inputfile.truncate()
 inputfile.close()
+
+inputfile2 = open('outB2.list','r+')
+linesOfFile2=inputfile2.readlines()
+noOfRows2, noOfCols2 = linesOfFile2[0].split()
+inputfile2.seek(0)
+inputfile2.writelines(linesOfFile2[1:])
+inputfile2.truncate()
+inputfile2.close()
 
 class MatrixMultiplication(MRJob):
 
@@ -22,8 +30,12 @@ class MatrixMultiplication(MRJob):
         line = list(map(int, line))
         row, col, value = line
 
-        yield col, (0, row, value)
-        yield row,  (1, col, value)
+        filename = os.environ['mapreduce_map_input_file']
+
+        if 'A' in filename:
+            yield col, (0, row, value)
+        elif 'B' in filename:
+            yield row,  (1, col, value)
 
     def reducer_multiply(self, keys, values):
         matrix0=[]

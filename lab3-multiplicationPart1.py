@@ -2,14 +2,6 @@ from mrjob.job import MRJob
 from mrjob.step import MRStep
 import os
 
-inputfile = open('File2ForLab3.txt','r+')
-linesOfFile=inputfile.readlines()
-noOfRows, noOfCols = linesOfFile[0].split()
-inputfile.seek(0)
-inputfile.writelines(linesOfFile[1:])
-inputfile.truncate()
-inputfile.close()
-
 class MatrixMultiplication(MRJob):
 
     f = open('partialOutputQ6.txt', 'w')

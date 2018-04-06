@@ -4,31 +4,33 @@ import os
 import time
 
 t00=time.time()
-inputfile = open('outA2.list','r+')
+inputfile = open('outA3.list','r+')
 linesOfFile=inputfile.readlines()
 noOfRows, noOfCols = linesOfFile[0].split()
-inputfile.seek(0)
-inputfile.writelines(linesOfFile[1:])
-inputfile.truncate()
-inputfile.close()
 
-inputfile2 = open('outB2.list','r+')
+inputfile2 = open('outB3.list','r+')
 linesOfFile2=inputfile2.readlines()
 noOfRows2, noOfCols2 = linesOfFile2[0].split()
-inputfile2.seek(0)
-inputfile2.writelines(linesOfFile2[1:])
-inputfile2.truncate()
-inputfile2.close()
+
+counter = 0
 
 class MatrixMultiplication(MRJob):
 
     f = open('OutputAlgorithmA.txt', 'w')
 
     def mapper(self, _, line):
+        global counter
         # This function automatically reads in lines of code
         line = line.split()
         line = list(map(int, line))
-        row, col, value = line
+        if len(line) == 3:
+            row, col, value = line
+        elif len(line) == 2 and counter == 1:
+            row, value = line
+            col = 0
+        elif len(line) == 2 and counter == 0:
+            counter = 1
+            return
 
         filename = os.environ['mapreduce_map_input_file']
 
@@ -76,17 +78,6 @@ if __name__ == '__main__':
     MatrixMultiplication.run()
     t1 = time.time()
 
-    # Open file and write dimensions back
-    inputfile = open('File1ForLab3.txt','r+')
-    linesOfFile=inputfile.readlines()
-    string1 = str(noOfRows)+ " "+ str(noOfCols) + '\n'
-    linesOfFile.insert(0, string1)
-    inputfile.seek(0)
-    inputfile.writelines(linesOfFile)
-
-    t2 = time.time()
-
     totalWithoutWrite = t1 - t0
-    totalWithWrite = t2 - t00
     print ("Total time for algorithmA: " + str(totalWithoutWrite))
     #print ("Total time for algorithmA with writing to file: " + str(totalWithWrite))

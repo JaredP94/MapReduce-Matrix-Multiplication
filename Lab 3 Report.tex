@@ -124,7 +124,7 @@
 		
 		
 		
-		{\large Date Handed In: \nth{5} April, 2018}\\[1cm] 
+		{\large Date Handed In: \nth{10} April, 2018}\\[1cm] 
 		
 	\end{titlepage}
 
@@ -210,6 +210,8 @@ From Equation \ref{eqn:multiply1}, in order to calculate the pairs of nodes that
 In order to perform the calculation, multiplication algorithm A was used. First, the input text file was multiplied with itself to result in A$^{2}$. Then, the resulting matrix was multiplied with the input text file to result in A$^{3}$. In order to count the number of paths, the resulting matrix entries were summed, and this value indicates the total number of paths of length 3.
 
 \subsection{Implementation} 
+Since the input file is a symmetric matrix given in upper triangular form, the lower triangle must first be produced. This is done by letting $M_{ji}$ equal $M_{ij}$, where i is the row index and j is the column index. The input file with the full matrix is then used as the input to the procedure to determine the number of paths of length 3.
+
 In order to implement the above mentioned procedure, two multiplication classes were required. The first (\textit{lab3-multiplicationPart1.py}) makes use of Algorithm A as discussed in \secref{algA}. The result of the first multiplication is written to the text file \textit{partialOutputQ6.txt}. The second class (\textit{lab3-multiplicationPart2.py}) makes use of Algorithm A, but takes two in input files. This is necessary for the second multiplication in which the resultant matrix is multiplied by the input matrix. In this class, the text files are differentiated by name using the MRJob \texttt{os.environ['mapreduce\_map\_input\_file']} function which gives the program access to the input file name. By using the file name, all data that originates from the file \textit{File2ForLab3.txt} is assigned a 0 as an identifier, and all data from the other file is assigned a 1.
 
 To calculate the total number of paths of length 3, a third mapper and reducer stage was added to the second class. In the mapper stage, all the entries of the resulting matrix were assigned the key \textit{Number of paths: }. This ensures that all the values have the same key and can thus be summed in the reducer. Within the reducer stage, the values are summed and the final count is written to the output file.
@@ -254,7 +256,7 @@ In order to run the two classes, a bash script was created. Within this script, 
 		\hline 
 		\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
 		\hline 
-		A &  \\ 
+		A & 25809.8268780708 \\ 
 		\hline 
 		B &  \\ 
 		\hline 

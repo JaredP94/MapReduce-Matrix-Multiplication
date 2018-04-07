@@ -154,16 +154,18 @@ The input data is read in one line at a time. The \texttt{mapper} function perfo
 MrJob is intended as an easy way to write Python programs that run on Hadoop. Using MrJob, one is able to test the code locally, without installing Hadoop, before you deploy the code on your cluster. For the purpose of this laboratory, this local approach was used. Additionally, MrJob was preferred over other Python MapReduce libraries owing to its relative ease of implementation and availability of documentation.
 
 \section{Multiplication}
-Two algorithms for performing matrix multiplication with MapReduce were implemented. Since the matrix is to be multiplied with itself, only one matrix is taken as an input to the job.
+Two algorithms for performing matrix multiplication with MapReduce were implemented. Two input matrices are used as input to the job.
 
 In both the algorithms, the \texttt{mapper} function transforms the input file into a format which can be used by the \texttt{reducer} to perform the necessary calculations. The input data to the \texttt{mapper} function is a line from the text file in the form \textit{row column value}. The data is then assigned a key so that a key-value pair can be yielded from the function.
 
 The \texttt{reduce} function performs computations on the key-value pairs produced by the \texttt{mapper} function in order to produce the product matrix.
 
+The implemented algorithms make use of the MapReduce framework in two different ways. The first uses multiple mapping and reducing stages, while the second only makes use of a single mapper stage with two reducer stages. The use of these algorithms allows one to determine whether having more MapReduce steps results in a performance increase, or if having more computations within fewer steps performs better.
+
 \subsection{Algorithm A} \label{algA}
 In Algorithm A, two MapReduce steps are used, meaning that a \texttt{mapper} and \texttt{reducer} stage are used, followed by a second \texttt{mapper} and \texttt{reducer} stage.
 
-In the first step, the algorithm takes in one matrix which is viewed as two matrices for the calculations. The matrix is thus represented as $M(I, J, V)$ with tuples $(i, j, m_{ij})$ and $N(J, K, W)$ with tuples $(j, k, n_{jk})$. These tuples represent the (row index, column index, value).
+In the first step, the algorithm takes in two matrices. The first input matrix is represented as $M(I, J, V)$ with tuples $(i, j, m_{ij})$ and the second as $N(J, K, W)$ with tuples $(j, k, n_{jk})$. These tuples represent the (row index, column index, value).
 
 The value of each element in the two matrices is assigned a key according to it's j value which is common to both matrices. For the first matrix (M), the key j is emitted corresponding to the value $(0, i, m_{ij})$, where 0 is used as an identifier for matrix M. Likewise, for matrix N, the key j is emitted and its corresponding value is $(1, k, n_{jk})$. For matrix N, 1 is used as an identifier. Since only one input matrix is used, for each line of the input file, both of the above mentioned key-value pairs are emitted.
 

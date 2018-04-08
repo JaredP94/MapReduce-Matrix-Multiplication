@@ -291,7 +291,7 @@ Using the limited RAM available on the group member's laptops, Algorithm B could
 	\end{tabular} 
 \end{table}
 
-From the above results, it is evident that Algorithm A far outperforms Algorithm B. For all of the input matrices, the time taken to run Algorithm A is less than half that of Algorithm B. It can thus be concluded that an algorithm that makes use of more MapReduce steps has a far superior performance than one that has more computations in fewer steps. 
+From the above results, it is evident that Algorithm A far outperforms Algorithm B. For all of the input matrices, the time taken to run Algorithm A is less than half that of Algorithm B. It can thus be concluded that an algorithm that makes use of more MapReduce steps has a far superior performance than one that has more computations in fewer steps. It should also be noted that the MrJob framework is implemented by chaining each process together in a serial configuration. Therefore, an improvement in the run time of both algorithms could be made by making use of Hadoop in order to produce a parallel configuration through subprocesses.
 
 \bibliographystyle{witseie}
 \bibliography{lab3}

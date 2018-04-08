@@ -1,12 +1,12 @@
 # ELEN4020-lab3
 
-The github repository for this laboratory can be found at: 
+The github repository for this laboratory can be found at:
 
-https://github.com/JaredP94/ELEN4020-Lab3 
+https://github.com/JaredP94/ELEN4020-Lab3
 
-To clone our github repository, one of two urls can be used: 
+To clone our github repository, one of two urls can be used:
 
-HTTP https://github.com/JaredP94/ELEN4020-Lab3.git 
+HTTP https://github.com/JaredP94/ELEN4020-Lab3.git
 
 SSH git@github.com:JaredP94/ELEN4020-Lab3.git
 
@@ -15,9 +15,11 @@ SSH git@github.com:JaredP94/ELEN4020-Lab3.git
 
 ### Solution      Contains the code implementation for lab exercise 3
 
+** Important: **
+
 Before running the code:
 
-Edit AlgorithmA.py and AlgorithmB.py Line 7 & 11 to ensure file names match input files.
+Edit AlgorithmA.py and AlgorithmB.py Lines 7 & 11 to ensure file names inside ``` open() ``` match the input files.
 
 To run the input files:
 
@@ -33,9 +35,7 @@ AlgorithmB: ``` python AlgorithmB.py outA2.list outB2.list ```
 
 AlgorithmB: ``` python AlgorithmB.py outA3.list outB3.list ```
 
-Note: To open desired input files, file names must be added on Line 7 & 11
-
-To run question 6, a script must be run. 
+To run question 6, a script must be run.
 
 In order to do this, run ``` ./script ```
 
@@ -46,4 +46,3 @@ In order to do this, run ``` ./script ```
 Code: code related files
 
 Docs: documentation related files
-

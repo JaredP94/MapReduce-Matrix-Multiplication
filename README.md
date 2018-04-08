@@ -15,12 +15,25 @@ SSH git@github.com:JaredP94/ELEN4020-Lab3.git
 
 ### Solution      Contains the code implementation for lab exercise 3
 
+** Important: **
+
+Before running the code:
+
+Edit AlgorithmA.py and AlgorithmB.py Lines 7 & 11 to ensure file names inside ``` open() ``` match the input files.
+
 To run the input files:
 
-AlgorithmA: ``` python AlgorithmA.py File1ForLab3.txt ```
+AlgorithmA: ``` python AlgorithmA.py outA1.list outB1.list ```
 
-AlgorithmB: ``` python AlgorithmB.py File1ForLab3.txt ```
+AlgorithmA: ``` python AlgorithmA.py outA2.list outB2.list ```
 
+AlgorithmA: ``` python AlgorithmA.py outA3.list outB3.list ```
+
+AlgorithmB: ``` python AlgorithmB.py outA1.list outB1.list ```
+
+AlgorithmB: ``` python AlgorithmB.py outA2.list outB2.list ```
+
+AlgorithmB: ``` python AlgorithmB.py outA3.list outB3.list ```
 
 To run question 6, a script must be run. 
 
@@ -33,4 +46,3 @@ In order to do this, run ``` ./script ```
 Code: code related files
 
 Docs: documentation related files
-

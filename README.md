@@ -13,9 +13,9 @@ SSH git@github.com:JaredP94/ELEN4020-Lab3.git
 ---------------------------------------------------------------------------
 ## BRANCHES:
 
-### Solution      Contains the code implementation for lab exercise 3
+### Code      Contains the code implementation for lab exercise 3
 
-** Important: **
+**Important:**
 
 Before running the code:
 

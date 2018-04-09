@@ -1,0 +1,299 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% witseiepaper-2005.tex
+%
+%                       Ken Nixon (12 October 2005)
+%
+%                       Sample Paper for ELEN417/455 2005
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[10pt,twocolumn]{witseiepaper}
+%
+% All KJN's macros and goodies (some shameless borrowing from SPL)
+\usepackage{KJN}
+\usepackage[super]{nth}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{epstopdf}
+\usepackage{xcolor}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{alltt}
+%\usepackage{matlab-prettifier}
+\usepackage{graphicx}
+\usepackage{changes}
+\usepackage{makecell}
+\usepackage{verbatim}
+\usepackage{balance}
+\usepackage{pdfpages}
+\usepackage{ragged2e}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{multirow}
+\usepackage{algpseudocode}
+\usepackage{color} %red, green, blue, yellow, cyan, magenta, black, white
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+%\usepackage{flafter}
+
+%\newlength\myindent
+%\setlength\myindent{2em}
+%\newcommand\bindent{%
+%	\begingroup
+%	\setlength{\itemindent}{\myindent}
+%	\addtolength{\algorithmicident}{\myindent}
+%}
+%\newcolumntype\eindent{\endgroup}
+%
+% PDF Info
+%
+\ifpdf
+\pdfinfo{
+	/Title (INSTRUCTIONS AND STYLE GUIDELINES FOR THE PREPARATION OF FINAL YEAR LABORATORY PROJECT PAPERS : 2005 VERSION)
+	/Author (Ken J Nixon)
+	/CreationDate (D:200309251200)
+	/ModDate (D:200510121530)
+	/Subject (ELEN417/455 Paper Format, 2005)
+	/Keywords (ELEN417, ELEN455, paper, instructions, style guidelines, laboratory project)
+}
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+	
+	\begin{titlepage}
+		
+		\newcommand{\HRule}{\rule{\linewidth}{0.3mm}} % Defines a new command for the horizontal lines, change thickness here
+		
+		\center % Center everything on the page
+		
+		%----------------------------------------------------------------------------------------
+		%	HEADING SECTIONS
+		%----------------------------------------------------------------------------------------
+		\includegraphics[width=0.3\textwidth]{EIE.png}\\[1cm] % Include a department/university logo - this will require the graphicx package
+		
+		%----------------------------------------------------------------------------------------
+		\textsc{\LARGE University of the Witwatersrand } \\[0.1cm] % Name of your university/college
+		\textsc{\LARGE School of Electrical and Information Engineering }\\[1cm] % Major heading such as course name
+		\textsc{\Large ELEN4020: Data Intensive Computing}\\[1.5cm] % Minor heading such as course title
+		
+		%----------------------------------------------------------------------------------------
+		%	TITLE SECTION
+		%----------------------------------------------------------------------------------------
+		
+		\HRule \\[0.4cm]
+		{ \huge \bfseries Laboratory Exercise 3} \\[0.4cm] % Title of your document
+		\HRule \\[1.5cm]
+		
+		%----------------------------------------------------------------------------------------
+		%	AUTHOR SECTION
+		%----------------------------------------------------------------------------------------
+		\textsc{\Large 	\emph{Authors:} } \\[0.1cm]	 
+		
+		
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushleft} \large
+				%			\emph{Author:} \\
+				Kayla-Jade Butkow \\ 714227 % Your name
+			\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushright} \large
+				%	\emph{Author:}\\
+				Jared Ping \\ 704447
+			\end{flushright}
+		\end{minipage}\\[1cm]
+		
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushleft} \large
+				%		\emph{Author:}\\
+				Lara Timm \\ 704157
+			\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushright} \large
+				%		\emph{Author:} \\
+				Matthew van Rooyen \\ 706692
+			\end{flushright}
+		\end{minipage}\\[1cm]
+		
+		
+		
+		{\large Date Handed In: \nth{10} April, 2018}\\[1cm] 
+		
+	\end{titlepage}
+
+
+\pagestyle{plain}
+\setcounter{page}{1}
+\onecolumn
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\section{Matrix Multiplication}
+
+The input to the \texttt{mapper} function is a text file containing a input matrix written in Matrix-Market format. The first row of the file provides the dimensions of the matrix. The following rows contain three columns, with the first two representing the row and column index of the element and the third the value of the element.
+
+The product matrix is represented as $P_{ik} = M_{ij} * N_{jk}$, where $M_{ij}$ and $N_{jk}$ are the input matrices. In order to perform the multiplication, the first row of M is multiplied by the first column in N and the resultant values are summed. This process is performed for every combination of rows in M and columns in N. 
+
+\section{MapReduce \& MrJob}
+
+In order to perform matrix multiplication for large matrices, a MapReduce algorithm was implemented. The algorithm consists of two distinct parts, namely the \texttt{mapper} function and \texttt{reducer} function. 
+
+The \texttt{mapper} function takes as an input a key and a value and emits key-value pairs. The \texttt{reducer} function then makes use of the output from the \texttt{mapper} function. It takes as inputs a key and a list of values associated with the key and performs an action of the values. It also emits key-value pairs.
+
+MrJob is a MapReduce framework which provides an environment which allows multi-step MapReduce jobs to be written in Python and run on a variety platforms~\cite{mrjob}. A \textit{job} is defined by class which inherits from \texttt{MRJob}, and which contains the functions which define the \textit{steps} of the job. Each \textit{step} consists of a \texttt{mapper}, a \texttt{combiner} and a \texttt{reducer}, of which you must use at least one~\cite{mrjob}.
+
+% not sure about this one
+The input data is read in one line at a time. The \texttt{mapper} function performs the role of map in MapReduce allocating key-value pairs to each line of text input. Similarly, the \texttt{reducer} performs the reduce task in order to output a single value for each key-value pair. Each yield function found at the end of the mapper and reducer is responsible for a single line of output code.
+
+MrJob is intended as an easy way to write Python programs that run on Hadoop. Using MrJob, one is able to test the code locally, without installing Hadoop, before you deploy the code on your cluster. For the purpose of this laboratory, this local approach was used. Additionally, MrJob was preferred over other Python MapReduce libraries owing to its relative ease of implementation and availability of documentation.
+
+\section{Multiplication}
+Two algorithms for performing matrix multiplication with MapReduce were implemented. Two input matrices are used as input to the job.
+
+In both the algorithms, the \texttt{mapper} function transforms the input file into a format which can be used by the \texttt{reducer} to perform the necessary calculations. The input data to the \texttt{mapper} function is a line from the text file in the form \textit{row column value}. The data is then assigned a key so that a key-value pair can be yielded from the function.
+
+The \texttt{reduce} function performs computations on the key-value pairs produced by the \texttt{mapper} function in order to produce the product matrix.
+
+The implemented algorithms make use of the MapReduce framework in two different ways. The first uses multiple mapping and reducing stages, while the second only makes use of a single mapper stage with two reducer stages. The use of these algorithms allows one to determine whether having more MapReduce steps results in a performance increase, or if having more computations within fewer steps performs better.
+
+\subsection{Algorithm A} \label{algA}
+In Algorithm A, two MapReduce steps are used, meaning that a \texttt{mapper} and \texttt{reducer} stage are used, followed by a second \texttt{mapper} and \texttt{reducer} stage.
+
+In the first step, the algorithm takes in two matrices. The first input matrix is represented as $M(I, J, V)$ with tuples $(i, j, m_{ij})$ and the second as $N(J, K, W)$ with tuples $(j, k, n_{jk})$. These tuples represent the (row index, column index, value).
+
+The value of each element in the two matrices is assigned a key according to it's j value which is common to both matrices. For the first matrix (M), the key j is emitted corresponding to the value $(0, i, m_{ij})$, where 0 is used as an identifier for matrix M. Likewise, for matrix N, the key j is emitted and its corresponding value is $(1, k, n_{jk})$. For matrix N, 1 is used as an identifier. Since only one input matrix is used, for each line of the input file, both of the above mentioned key-value pairs are emitted.
+
+In the reduce function in the first step, the values corresponding to the key are divided into two matrices: matrix0 and matrix1 according to the first entry of the value. If the first entry of the value is 0, the value is appended onto matrix0 and likewise for matrix1. Thereafter, for each key j, the corresponding values ($m_{ij}$ and $n_{jk}$ from matrix0 and matrix1 respectively) are multiplied and the key-value pair j, $(i, k, m_{ij}n_{jk})$ is emitted.
+
+The output of the reduce function is then used as the input to the map function in the second step.
+
+In the second step, a key-value pair of the form (i,k) is created for each element and assigned the combined value $m_{ij}n_{jk}$ in the mapper stage. The i value represents the row index of the product matrix and k represents the column index. 
+
+In the final reducer stage, all the values corresponding to each key are summed. This allows for the resultant value at each matrix index to be calculated. Then, a final key-value pair is emitted where the key represents the row index and column index of the entry in the product matrix, and the value is the final value at each index.
+
+\subsection{Algorithm B}
+
+Algorithm B makes use of a combined map and reduce step and a reduce step. In the  \texttt{mapper} stage, for matrix M, the key-value pair is $((i, k), (0, j, m_{ij}))$ for each value $m_{ij}$ of M. The variable k goes from 1 to the number of columns of N. In order to implement this, a for loop was created ranging from 0 to the number of columns of in. Within the for loop, a key-value pair is emitted for each value of k.
+
+Likewise, for matrix N, the key-value pair is $((i, k), (1, j, n_{jk}))$ for each value $n_{jk}$ of N. The variable i goes from 1 to the number of rows of M. The key-value pairs were then emitted as described above.
+	
+The output of the map function is then used as the input to the reducer. 
+
+In the first reducer, the key (i,k) represents the row and column index of the product matrix. First, the values corresponding to the key are divided into two matrices: matrix0 and matrix1 according to the first entry of the value. If the first entry of the value is 0, the value is appended onto matrix0 and likewise for matrix1. Next, for each key, the values in matrix M are sorted according to their j values. This is then repeated for matrix N. Finally, the values $m_{ij}$ and $n_{jk}$ at the $j_{th}$ index of each list are the multiplied together for each value of j. 
+
+In the second reducer, the values corresponding to each key are calculated. Then, a final key-value pair is emitted where the key represents the row index and column index of the entry in the product matrix, and the value is the final value at each index.
+
+\section{Pairs of Nodes Connected by Paths of Length 3}
+\subsection{Overview}
+According to \cite{pathLength3}, the total number of paths of length 3 from j to i in G is:
+
+ \begin{equation}
+N_{ij}^{3} = \sum _{k,l = 1}^{n} A_{ik}A_{kl}A_{ij} = [G^{3}]_{ij}
+\label{eqn:multiply1}
+\end{equation}
+
+Where:
+\begin{tabular}{lll}
+	$G = (v,e)$           &  is an unweighted directed graph of $\mid v \mid$ nodes and $\mid e \mid$ edges \\
+\end{tabular}
+
+From Equation \ref{eqn:multiply1}, it is evident that the most efficient way to represent G is in matrix form. Since the majority of the values in the G matrix are 0, all zero value entires should be emitted from the input file.
+
+From Equation \ref{eqn:multiply1}, in order to calculate the pairs of nodes that are connected by paths of length 3, the input matrix \textit{File2ForLab3.txt} must be cubed.
+
+In order to perform the calculation, multiplication algorithm A was used. First, the input text file was multiplied with itself to result in A$^{2}$. Then, the resulting matrix was multiplied with the input text file to result in A$^{3}$. In order to count the number of paths, the resulting matrix entries were summed, and this value indicates the total number of paths of length 3.
+
+\subsection{Implementation} 
+Since the input file is a symmetric matrix given in upper triangular form, the lower triangle must first be produced. This is done by letting $M_{ji}$ equal $M_{ij}$, where i is the row index and j is the column index. The input file with the full matrix is then used as the input to the procedure to determine the number of paths of length 3.
+
+In order to implement the above mentioned procedure, two multiplication classes were required. The first (\textit{lab3-multiplicationPart1.py}) makes use of Algorithm A as discussed in \secref{algA}. The result of the first multiplication is written to the text file \textit{partialOutputQ6.txt}. The second class (\textit{lab3-multiplicationPart2.py}) makes use of Algorithm A, but takes two in input files. This is necessary for the second multiplication in which the resultant matrix is multiplied by the input matrix. In this class, the text files are differentiated by name using the MRJob \texttt{os.environ['mapreduce\_map\_input\_file']} function which gives the program access to the input file name. By using the file name, all data that originates from the file \textit{File2ForLab3.txt} is assigned a 0 as an identifier, and all data from the other file is assigned a 1.
+
+To calculate the total number of paths of length 3, a third mapper and reducer stage was added to the second class. In the mapper stage, all the entries of the resulting matrix were assigned the key \textit{Number of paths: }. This ensures that all the values have the same key and can thus be summed in the reducer. Within the reducer stage, the values are summed and the final count is written to the output file.
+
+In order to run the two classes, a bash script was created. Within this script, the two classes are called with their respective input files. The final resulting matrix is written to the text file \textit{outputQ6.txt}. 
+
+\section{Results}
+
+%From the tables below, it is evident that Algorithm B was found to perform best. This result was obtained by performing a timed benchmark on the multiplication of two 3 x 3 matrices. The matrix used is matrix M a given below.
+
+%$ M = \begin{bmatrix}
+%0 &1 &6\\
+%6 &0 &1\\
+%4 &0 &0\\
+%\end{bmatrix} $
+%
+%The resultant matrix is:
+%$ P = \begin{bmatrix}
+%30 &0 &1\\
+%4 &6 &36\\
+%0 &4 &24\\
+%\end{bmatrix} $
+
+\begin{table}[h]
+		\centering
+		\caption{Time taken to multiply outA1 and outB1 matrices using Algorithm A and B}
+\begin{tabular}{|l|l|}
+	\hline 
+	\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
+	\hline 
+	 A & 52.20356583595276 \\ 
+	\hline 
+	 B & 106.5891628265380 \\ 
+	\hline 
+\end{tabular} 
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{Time taken to multiply outA2 and outB2 matrices using Algorithm A and B}
+	\begin{tabular}{|l|l|}
+		\hline 
+		\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
+		\hline 
+		A & 2804.1820132013273 \\ 
+		\hline 
+		B & Could not be determined \\ 
+		\hline 
+	\end{tabular} 
+\end{table}
+
+Using the limited RAM available on the group member's laptops, Algorithm B could not be executed to completion. As such, a time benchmark could not be calculated. 
+
+\begin{table}[h]
+	\centering
+	\caption{Time taken to multiply outA3 and outB3 matrices using Algorithm A and B}
+	\begin{tabular}{|l|l|}
+		\hline 
+		\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
+		\hline 
+		A & 47.3928279876709 \\ 
+		\hline 
+		B & 91.8078939914703 \\ 
+		\hline 
+	\end{tabular} 
+\end{table}
+
+\begin{table}[h]
+	\centering
+	\caption{Time taken to determine number of paths by cubing outNetwork matrix using Algorithm A}
+	\begin{tabular}{|l|l|}
+		\hline 
+		\textbf{Algorithm} & \textbf{Time taken (s)} \\ 
+		\hline 
+		A & 2105.412 \\ 
+		\hline 
+	\end{tabular} 
+\end{table}
+
+From the above results, it is evident that Algorithm A far outperforms Algorithm B. For all of the input matrices, the time taken to run Algorithm A is less than half that of Algorithm B. It can thus be concluded that an algorithm that makes use of more MapReduce steps has a far superior performance than one that has more computations in fewer steps. It should also be noted that the MrJob framework is implemented by chaining each process together in a serial configuration. Therefore, an improvement in the run time of both algorithms could be made by making use of Hadoop in order to produce a parallel configuration through subprocesses.
+
+\bibliographystyle{witseie}
+\bibliography{lab3}
+
+\end{document}

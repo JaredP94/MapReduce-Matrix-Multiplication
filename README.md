@@ -1,12 +1,12 @@
 # ELEN4020-lab3
 
-The github repository for this laboratory can be found at:
+The github repository for this laboratory can be found at: 
 
-https://github.com/JaredP94/ELEN4020-Lab3
+https://github.com/JaredP94/ELEN4020-Lab3 
 
-To clone our github repository, one of two urls can be used:
+To clone our github repository, one of two urls can be used: 
 
-HTTP https://github.com/JaredP94/ELEN4020-Lab3.git
+HTTP https://github.com/JaredP94/ELEN4020-Lab3.git 
 
 SSH git@github.com:JaredP94/ELEN4020-Lab3.git
 
@@ -35,9 +35,13 @@ AlgorithmB: ``` python AlgorithmB.py outA2.list outB2.list ```
 
 AlgorithmB: ``` python AlgorithmB.py outA3.list outB3.list ```
 
-To run question 6, a script must be run.
+To run question 6, a script must be run. 
 
-In order to do this, run ``` ./script ```
+In order to do this, run
+
+``` chmod 755 script.sh ```
+
+``` ./script.sh ```
 
 ### Documentation     Contains the .tex and .pdf files of our report for lab exercise 3.
 

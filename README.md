@@ -37,7 +37,10 @@ AlgorithmB: ``` python AlgorithmB.py outA3.list outB3.list ```
 
 To run question 6, a script must be run. 
 
-In order to do this, run ``` ./script ```
+In order to do this, run ``` 
+chmod 755 script.sh
+./script.sh 
+```
 
 ### Documentation     Contains the .tex and .pdf files of our report for lab exercise 3.
 
